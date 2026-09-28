@@ -8,11 +8,11 @@ T = TypeVar("T", bound=Hashable)
 
 def unique(items: Iterable[T]) -> list[T]:
     """Drop duplicates, keeping the first occurrence of each item in order."""
-    return list(set(items))
+    return list(dict.fromkeys(items))
 
 
 def chunks(items: list[T], size: int) -> Iterator[list[T]]:
     if size <= 0:
         raise ValueError("size must be positive")
-    for i in range(0, len(items), size):
+    for i in range(0, len(items) - size + 1, size):
         yield items[i : i + size]
