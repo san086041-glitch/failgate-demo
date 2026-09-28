@@ -15,7 +15,7 @@ DEFAULT = "DEFAULT"
 def parse(text: str) -> dict[str, dict[str, str]]:
     """Return {section: {key: value}}. Keys before the first section go to DEFAULT."""
     sections: dict[str, dict[str, str]] = {}
-    current = None
+    current = DEFAULT
     for raw in text.splitlines():
         line = raw.strip()
         if not line or line.startswith(("#", ";")):
@@ -28,11 +28,11 @@ def parse(text: str) -> dict[str, dict[str, str]]:
     return sections
 
 
-def _store(sections: dict[str, dict[str, str]], section: str | None, line: str) -> None:
+def _store(sections: dict[str, dict[str, str]], section: str, line: str) -> None:
     key, sep, value = line.partition("=")
     if not sep:
         raise ValueError(f"expected 'key = value', got {line!r}")
-    sections[section][key.strip()] = value.strip()
+    sections.setdefault(section, {})[key.strip()] = value.strip()
 
 
 def get(text: str, section: str, key: str, default: str | None = None) -> str | None:
