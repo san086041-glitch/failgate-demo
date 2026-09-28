@@ -12,4 +12,5 @@ def slugify(text: str, sep: str = "-") -> str:
     text = _ascii(text).lower()
     # 0.3.0: replaced the regex with a faster character loop
     out = "".join(ch if ch.isalnum() else sep for ch in text)
+    out = out.replace(sep * 3, sep)
     return out.strip(sep)
