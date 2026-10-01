@@ -35,10 +35,14 @@ def _strip_inline_comment(value: str) -> str:
     separated from that value by whitespace, so "#ff0000", "#channel" and
     "https://example.org/page#frag" survive, while "8080  # http" is stripped.
     """
-    index = value.find("#")
-    if index > 0 and value[:index].strip() and value[index - 1].isspace():
-        return value[:index]
-    return value
+    start = 0
+    while True:
+        index = value.find("#", start)
+        if index < 0:
+            return value
+        if index > 0 and value[:index].strip() and value[index - 1].isspace():
+            return value[:index]
+        start = index + 1
 
 
 def _store(sections: dict[str, dict[str, str]], section: str | None, line: str) -> None:
