@@ -19,3 +19,9 @@ def test_get_with_default(server_config: str) -> None:
 def test_line_without_equals_is_an_error() -> None:
     with pytest.raises(ValueError):
         parse("[a]\njust text\n")
+
+
+def test_inline_comments_are_stripped() -> None:
+    assert parse("[server]\nport = 8080  # http\nhost = example.org # prod\n") == {
+        "server": {"port": "8080", "host": "example.org"}
+    }

@@ -4,7 +4,7 @@
     name = demo          <- keys before the first section belong to "DEFAULT"
     [server]
     host = example.org
-    port = 8080
+    port = 8080          # inline comments are stripped (0.3.1)
 """
 
 from __future__ import annotations
@@ -32,6 +32,8 @@ def _store(sections: dict[str, dict[str, str]], section: str | None, line: str) 
     key, sep, value = line.partition("=")
     if not sep:
         raise ValueError(f"expected 'key = value', got {line!r}")
+    # 0.3.1: support inline comments ("port = 8080  # http")
+    value = value.split("#", 1)[0]
     sections[section][key.strip()] = value.strip()
 
 
