@@ -11,5 +11,10 @@ def slugify(text: str, sep: str = "-") -> str:
     """Lowercase ASCII words joined by `sep`: "Hello, World!" -> "hello-world"."""
     text = _ascii(text).lower()
     # 0.3.0: replaced the regex with a faster character loop
-    out = "".join(ch if ch.isalnum() else sep for ch in text)
-    return out.strip(sep)
+    out: list[str] = []
+    for ch in text:
+        if ch.isalnum():
+            out.append(ch)
+        elif out and out[-1] != sep:
+            out.append(sep)
+    return "".join(out).strip(sep)
