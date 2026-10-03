@@ -20,6 +20,12 @@ def parse(text: str) -> dict[str, dict[str, str]]:
         line = raw.strip()
         if not line or line.startswith(("#", ";")):
             continue
+        # 0.3.1: strip inline comments before classifying the line, so that a
+        # comment after a section header ("[server]  # main") is not mistaken
+        # for a key/value line.
+        line = line.split("#", 1)[0].strip()
+        if not line:
+            continue
         if line.startswith("[") and line.endswith("]"):
             current = line[1:-1].strip()
             sections.setdefault(current, {})
